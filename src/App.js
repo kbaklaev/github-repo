@@ -1,24 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Switch, Route, useHistory } from 'react-router-dom'
+
+import Main from './pages/main/main';
+import Repositories from './pages/repositories/repositories';
+import Readme from './pages/readme/readme';
 
 function App() {
+  const [userName, setUserName] = useState('')
+  const [repository, setReposytory] = useState('')
+  let history = useHistory()
+
+  const getUsername = (text) => {
+    console.log(text)
+    setUserName(text)
+    history.push(`/${text}`)
+  }
+
+  const getRepository = (rep) => {
+    console.log(rep)
+    setReposytory(rep)
+    history.push(`/${userName}/${rep}`)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Switch>
+        <Route exact path="/">
+          <Main username={getUsername} />
+        </Route>
+        <Route exact path="/:userName">
+          <Repositories username={userName} repository={getRepository} />
+        </Route>
+        <Route path="/:userName/:repositoryName">
+          <Readme username={userName} repository={repository} />
+        </Route>
+      </Switch>
     </div>
   );
 }
