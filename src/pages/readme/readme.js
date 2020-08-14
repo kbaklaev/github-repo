@@ -13,30 +13,42 @@ const Readme = ({ username, repository }) => {
   }, [username, repository])
 
   return (
-    <>
-      <header>
-        <h1 id="repository-name">
-          {`${username} ${repository}`}
+    <div className="flex flex-col h-full overflow-hidden">
+      <header className="flex items-center border-b border-teal-500 py-2">
+        <h1
+          id="repository-name"
+          className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+        >
+          {`${username} - ${repository}`}
         </h1>
         <Link
           id="go-back"
           to="/"
+          className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
         >
           Go Home
         </Link>&nbsp;
         <Link
           id="go-repository-list"
           to={`/${username}`}
+          className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
         >
           Go Back
         </Link>
       </header>
-      <div id="description">
-        <Markdown>
-          {atob(readme)}
-        </Markdown>
+      <div
+        id="description"
+        className="w-auto p-4 overflow-y-auto"
+      >
+        {
+          readme && (
+            <Markdown className="p-4 bg-teal-100 rounded">
+              {atob(readme)}
+            </Markdown>
+          )
+        }
       </div>
-    </>
+    </div>
   )
 }
 

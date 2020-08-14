@@ -11,19 +11,19 @@ function App() {
   let history = useHistory()
 
   const getUsername = (text) => {
-    console.log(text)
+    // console.log(text)
     setUserName(text)
     history.push(`/${text}`)
   }
 
   const getRepository = (rep) => {
-    console.log(rep)
+    // console.log(rep)
     setReposytory(rep)
     history.push(`/${userName}/${rep}`)
   }
 
   return (
-    <div>
+    <div className="container mx-auto p-4 w-full h-screen">
       <Switch>
         <Route exact path="/">
           <Main username={getUsername} />
