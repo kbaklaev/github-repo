@@ -4,38 +4,19 @@ import Axios from 'axios'
 
 const Repositories = ({ username, repository }) => {
   const [repositories, setRepositories] = useState([])
-
-  // TODO fetch with pages
-  // const [fetchComplite, setFetchComplite] = useState(false)
-
-  // const fetchRepositories = useCallback(async (page) => {
-  //   await Axios.get(`https://api.github.com/users/${username}/repos?page=${page}`)
-  //     .then(data => setRepositories([ ...repositories, ...data.data ]))
-  //     .catch((error) => {throw error})
-  // }, [repositories])
-
-  // useEffect(() => {
-  //   let page = 0
-  //   fetchRepositories(page += 1)
-  //   // while (fetchComplite === false) {
-  //   //   console.log('run while')
-  //   //   if (repositories.length === 0 || ) {
-
-  //   //   }
-  //   //   // repositories.length || repositories.length === 24
-  //   //   //   ? console.log('run fetch') //fetchRepositories(page += 1)
-  //   //   //   : setFetchComplite(true)
-  //   // }
-  // }, [fetchRepositories, username])
+  const [fetchPage, setFetchPage] = useState(1)
 
   useEffect(() => {
-    Axios.get(`https://api.github.com/users/${username}/repos`)
-      .then(data => setRepositories(data.data))
+    Axios.get(`https://api.github.com/users/${username}/repos?page=${fetchPage}`)
+      .then(data => {
+        setRepositories(repositories => [...repositories, ...data.data])
+        if (data.data.length === 30) setFetchPage(fetchPage + 1)
+      })
       .catch((error) => {throw error})
-  }, [username])
+  }, [username, fetchPage])
 
   return (
-    <>
+    <div className="flex flex-col h-full overflow-hidden">
       <header className="flex items-center border-b border-teal-500 py-2">
         <h1
           id="user-name"
@@ -51,7 +32,7 @@ const Repositories = ({ username, repository }) => {
           Go Back
         </Link>
       </header>
-      <div className="p-4">
+      <div className="p-4 w-auto overflow-y-auto">
         {
           !!repositories.length && (
             <ul className="list-disc list-inside bg-teal-100 rounded p-4">
@@ -72,7 +53,7 @@ const Repositories = ({ username, repository }) => {
           )
         }
       </div>
-    </>
+    </div>
   )
 }
 
