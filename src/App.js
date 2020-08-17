@@ -7,7 +7,7 @@ import Readme from './pages/readme/readme';
 
 function App() {
   const [userName, setUserName] = useState('')
-  const [repository, setReposytory] = useState('')
+  const [repository, setRepository] = useState('')
   let history = useHistory()
 
   const getUsername = (text) => {
@@ -18,7 +18,7 @@ function App() {
 
   const getRepository = (rep) => {
     // console.log(rep)
-    setReposytory(rep)
+    setRepository(rep)
     history.push(`/${userName}/${rep}`)
   }
 

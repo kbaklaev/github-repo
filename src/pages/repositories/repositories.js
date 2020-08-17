@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Axios from 'axios'
+import { useDispatch, useStore, useSelector } from 'react-redux'
 
 const Repositories = ({ username, repository }) => {
-  const [repositories, setRepositories] = useState([])
+  const store = useStore()
+  const repositories = useSelector(state => state)
   const [fetchPage, setFetchPage] = useState(1)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     Axios.get(`https://api.github.com/users/${username}/repos?page=${fetchPage}`)
       .then(data => {
-        setRepositories(repositories => [...repositories, ...data.data])
+        dispatch({ type: 'ADD_REPOSITORIES', payload: data.data })
+        console.log(store.getState())
         if (data.data.length === 30) setFetchPage(fetchPage + 1)
       })
       .catch((error) => {throw error})
-  }, [username, fetchPage])
+  }, [username, fetchPage, dispatch, store])
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
