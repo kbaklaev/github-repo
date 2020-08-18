@@ -2,7 +2,11 @@ import { createStore } from 'redux'
 
 import rootReducer from './rootReducer'
 
-export const initialState = []
+export const initialState = {
+  repositories: [],
+  fetchPage: 1,
+  fetchComplite: false
+}
 
 const store = createStore(
   rootReducer, initialState,

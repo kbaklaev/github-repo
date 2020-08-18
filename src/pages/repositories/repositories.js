@@ -1,23 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Axios from 'axios'
-import { useDispatch, useStore, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { addRepositories, clearRepositories, addPage, fetchCompliteAction } from '../../redux/actions'
 
 const Repositories = ({ username, repository }) => {
-  const store = useStore()
-  const repositories = useSelector(state => state)
-  const [fetchPage, setFetchPage] = useState(1)
+  const repositories = useSelector(state => state.repositories)
+  const page = useSelector(state => state.fetchPage)
+  const fetchComplite = useSelector(state => state.fetchComplite)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    Axios.get(`https://api.github.com/users/${username}/repos?page=${fetchPage}`)
+    if (fetchComplite === false) {
+      Axios.get(`https://api.github.com/users/${username}/repos?page=${page}`)
       .then(data => {
-        dispatch({ type: 'ADD_REPOSITORIES', payload: data.data })
-        console.log(store.getState())
-        if (data.data.length === 30) setFetchPage(fetchPage + 1)
+        dispatch(addRepositories(data.data))
+        data.data.length === 30
+          ? dispatch(addPage())
+          : dispatch(fetchCompliteAction())
       })
       .catch((error) => {throw error})
-  }, [username, fetchPage, dispatch, store])
+    }
+  }, [username, page, dispatch, fetchComplite])
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -31,6 +36,7 @@ const Repositories = ({ username, repository }) => {
         <Link
           id="go-back"
           to="/"
+          onClick={() => dispatch(clearRepositories())}
           className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
         >
           Go Back

@@ -8,8 +8,11 @@ const Readme = ({ username, repository }) => {
 
   useEffect(() => {
     Axios.get(`https://api.github.com/repos/${username}/${repository}/readme`)
-      .then(data => setReadme(data.data.content))
-      .catch(error => {throw error})
+      .then(data => {
+        console.log(data)
+        setReadme(data.data.content)
+      })
+      // .catch(error => {throw error})
   }, [username, repository])
 
   return (

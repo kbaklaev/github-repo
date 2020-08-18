@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { useDispatch } from 'react-redux'
 
 const Main = ({ username }) => {
   const [inputValue, setInputValue] = useState("");
-  const dispatch = useDispatch()
 
   const changeInputValue = (e) => {
     setInputValue(e.target.value);
@@ -11,7 +9,6 @@ const Main = ({ username }) => {
 
   const handleClick = () => {
     username(inputValue);
-    dispatch({ type: 'CLEAR_REPOSITORIES' })
   };
 
   const onKeyDown = (e) => {
