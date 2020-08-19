@@ -5,12 +5,15 @@ import Markdown from 'markdown-to-jsx'
 
 const Readme = ({ username, repository }) => {
   const [readme, setReadme] = useState('')
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     Axios.get(`https://api.github.com/repos/${username}/${repository}/readme`)
       .then(data => setReadme(data.data.content))
       .catch(error => {
-        console.log(error.res)
+        error.response.status === 404
+          ? setError(true)
+          : console.log(error)
       })
   }, [username, repository])
 
@@ -42,6 +45,13 @@ const Readme = ({ username, repository }) => {
         id="description"
         className="w-auto p-4 overflow-y-auto"
       >
+        {
+          error && (
+            <div className="font-bold text-center text-gray-700">
+              Readme file is empty or does not exist
+            </div>
+          )
+        }
         {
           readme && (
             <Markdown className="p-4 bg-teal-100 rounded">
